@@ -5,29 +5,41 @@
 	<title></title>
 	<style type="text/css">
 		.mb {margin-bottom:20px; display: block;}
+		input[type="number"] { width:100%; }
 	</style>
 	<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
-	<div style="width:300px; margin:100px auto;">
-		<div id="all">
-			<input class="mb first" type="" name="">
-			<input class="mb abled" type="" name="">
+	<form>
+		<div style="width:250px; margin:100px auto;">
+				<input type="button" class="mb" id="newInpt" style="float:right;" value="new input">
+				<div id="all">
+					<span>等级1</span><input class="mb first" type="number" name="">
+					<span>等级2</span><input class="mb abled" type="number" name="">
+				</div>
+				<input type="submit" value="提交" name="">
 		</div>
-		<button>new input</button>
-	</div>
+	</form>
 	<script type="text/javascript">
 		$('#all').on('blur', 'input:not(.first, .blured)', function(){
-			console.log('blur');
-			var prevVal = $(this).prev('input').val() - $(this).val();
 			
-			$(this).prev().val(prevVal);
-			$(this).prev().prop('disabled','disabled').css('background','#eee');
-			$(this).removeClass('abled').addClass('blured');
+			var pprevEle = $(this).prev().prev();
+			var pprevVal = pprevEle.val() - $(this).val();
+			if(pprevVal>0){
+				pprevEle.val(pprevVal);
+				pprevEle.prop('disabled','disabled').css('background','#eee');
+				$(this).removeClass('abled').addClass('blured');
+			} else {
+				alert("输入数字必须小于"+pprevEle.val());
+				$(this).val("").focus();
+			}
 		});
-		$('button').on('click',function(){
+		var i = 3;
+		$('#newInpt').on('click',function(){
+			
 			if($('.abled').length == 0 ){
-				$('#all').append('<input class="mb abled" type="" name="">')
+				$('#all').append('<span>等级'+i+'</span><input class="mb abled" type="number" name="">');
+				i++;
 			} else {
 				alert("一次只能创建一个！");
 			}
